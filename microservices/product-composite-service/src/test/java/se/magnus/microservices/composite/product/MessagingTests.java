@@ -162,16 +162,16 @@ public class MessagingTests {
 
     private void postAndVerifyProduct(ProductAggregate compositeProduct, HttpStatus expectedStatus) {
         client.post()
-                .uri("/product-composite")
-                .body(just(compositeProduct), ProductAggregate.class)
-                .exchange()
-                .expectStatus().isEqualTo(expectedStatus);
+            .uri("/product-composite")
+            .body(just(compositeProduct), ProductAggregate.class)
+            .exchange()
+            .expectStatus().isEqualTo(expectedStatus);
     }
 
     private void deleteAndVerifyProduct(int productId, HttpStatus expectedStatus) {
         client.delete()
-                .uri("/product-composite/" + productId)
-                .exchange()
-                .expectStatus().isEqualTo(expectedStatus);
+            .uri("/product-composite/" + productId)
+            .exchange()
+            .expectStatus().isEqualTo(expectedStatus);
     }
 }

@@ -19,6 +19,8 @@ spring.mongodb:
 
 spring.cloud.function.definition: messageProcessor
 
+spring.cloud.stream.output-bindings: products-out-0;recommendations-out-0;reviews-out-0
+
 spring.cloud.stream:
   defaultBinder: rabbit
   default.contentType: application/json

@@ -1,21 +1,18 @@
 package se.magnus.microservices.composite.product;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import se.magnus.api.event.Event;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 public class IsSameEvent extends TypeSafeMatcher<String> {
     private static final Logger LOG = LoggerFactory.getLogger(IsSameEvent.class);
@@ -68,7 +65,7 @@ public class IsSameEvent extends TypeSafeMatcher<String> {
     private String convertObjectToJsonString(Object object) {
         try {
             return mapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }
@@ -76,7 +73,7 @@ public class IsSameEvent extends TypeSafeMatcher<String> {
     private Map convertJsonStringToMap(String eventAsJson) {
         try {
             return mapper.readValue(eventAsJson, new TypeReference<HashMap>() {});
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }
