@@ -11,6 +11,11 @@ spring:
     mongodb:
       auto-index-creation: true
 
+spring.mongodb:
+  host: localhost
+  port: 27017
+  database: product-db
+
 ---
 spring.config.activate.on-profile: docker
 
