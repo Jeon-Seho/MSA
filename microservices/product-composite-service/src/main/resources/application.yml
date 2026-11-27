@@ -106,11 +106,6 @@ spring.rabbitmq:
   username: guest
   password: guest
 
-logging:
-  level:
-    root: INFO
-    se.magnus: DEBUG
-
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
