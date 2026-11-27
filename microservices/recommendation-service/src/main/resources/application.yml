@@ -14,9 +14,11 @@ spring:
 spring.mongodb:
   host: localhost
   port: 27017
-  database: product-db
+  database: recommendation-db
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
+
+spring.mongodb.host: mongodb
