@@ -1,5 +1,7 @@
 package se.magnus.microservices.composite.product;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,12 +16,16 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootApplication
 @ComponentScan("se.magnus")
 public class ProductCompositeServiceApplication {
+	private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceApplication.class);
+
 	@Value("${api.common.version}")
 	String apiVersion;
 
@@ -90,6 +96,23 @@ public class ProductCompositeServiceApplication {
 	@Bean
 	JsonMapperBuilderCustomizer allowFinalFieldsAsMutators() {
 		return builder -> builder.enable(MapperFeature.ALLOW_FINAL_FIELDS_AS_MUTATORS);
+	}
+
+	private final Integer threadPoolSize;
+	private final Integer taskQueueSize;
+
+	public ProductCompositeServiceApplication(
+		@Value("${app.threadPoolSize:10}") Integer threadPoolSize,
+		@Value("${app.taskQueueSize:100}") Integer taskQueueSize
+	) {
+		this.threadPoolSize = threadPoolSize;
+		this.taskQueueSize = taskQueueSize;
+	}
+
+	@Bean
+	public Scheduler publishEventScheduler() {
+		LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
+		return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
 	}
 
 	public static void main(String[] args) {
